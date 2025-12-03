@@ -103,7 +103,27 @@ def bisection(
             - Liczba wykonanych iteracji.
         Jeżeli dane wejściowe są niepoprawne funkcja zwraca `None`.
     """
-    pass
+    #if not (isinstance(a, int) or isinstance(b, int) or isinstance(epsilon, float) or isinstance(max_iter, int)):
+    #    return None
+    
+    if f(a) * f(b) > 0:
+        return None
+    
+    iter = 0
+    while abs(b-a) > 2.0*epsilon and iter < max_iter:
+        iter += 1
+        x0 = (a + b) / 2
+
+        if abs(f(x0)) < epsilon:
+            return x0, iter # Zakończenie kryterium wartości funkcji
+
+        if f(a) * f(x0) < 0:
+            b = x0
+        else:
+            a = x0
+
+    return (a + b) / 2, iter
+    
 
 
 def secant(
