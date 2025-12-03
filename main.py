@@ -122,7 +122,9 @@ def bisection(
         else:
             a = x0
 
-    return (a + b) / 2, iter
+    return (a + b) / 2, iter + 1
+
+
     
 
 
@@ -150,7 +152,38 @@ def secant(
             - Liczba wykonanych iteracji.
         Jeżeli dane wejściowe są niepoprawne funkcja zwraca `None`.
     """
-    pass
+    if not(isinstance(a, (int, float)) and isinstance(b, (int, float)) and isinstance(epsilon, float) and isinstance(max_iters, int)):
+        return None
+    
+    fa = f(a)
+    fb = f(b)
+    if fa * fb > 0:
+        return None
+    if fa == 0:
+        return a, 1
+    if fb == 0:
+        return b, 1
+   
+    iter = 0
+
+    for iter in range(1, max_iters+1):
+        if (fb-fa) == 0:
+            return None
+        
+        x_next = b - fb * (b-a)/(fb - fa)
+        fx = f(x_next)
+
+        if abs(fx) < epsilon:
+            return x_next, iter
+        
+        if fa*fx < 0:
+            b = x_next
+            fb=fx
+        else:
+            a = x_next
+            fa=fx
+    
+    return x_next, iter
 
 
 def difference_quotient(
