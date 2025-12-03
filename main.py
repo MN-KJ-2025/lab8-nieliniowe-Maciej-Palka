@@ -203,7 +203,12 @@ def difference_quotient(
         (float): Wartość ilorazu różnicowego.
         Jeżeli dane wejściowe są niepoprawne funkcja zwraca `None`.
     """
-    pass
+    if not (isinstance(x, (int, float)) and isinstance(h, (int, float))):
+        return None
+    if h == 0:
+        return None
+    
+    return(f(x+h) - f(x))/h
 
 
 def newton(
@@ -235,4 +240,35 @@ def newton(
             - Liczba wykonanych iteracji.
         Jeżeli dane wejściowe są niepoprawne funkcja zwraca `None`.
     """
-    pass
+    if not (isinstance(a, (int, float)) and isinstance(b, (int, float)) and isinstance(epsilon, float) and isinstance(max_iter, int)):
+        return None
+    
+    if a >= b:
+        return None
+    
+    fa = f(a)
+    fb = f(b)
+
+    if fa*fb > 0:
+        return None
+    
+    if fa*ddf(a) > 0:
+        x = a
+    elif fb*ddf(b) > 0:
+        x = b
+    else:
+        return None
+    
+    for iter in range(1, max_iter+1):
+        dfx = df(x)
+        if dfx == 0:
+            return None
+        
+        x_next = x - f(x) /dfx
+        if abs(f(x_next)) < epsilon:
+            return x_next, iter
+        
+        x = x_next
+
+    return x, max_iter
+    
